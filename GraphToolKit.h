@@ -255,7 +255,7 @@ int SetGraphErrorsDrawOption(TGraphErrors *gre, bool isdrawline=true, bool isdra
   return 0 ;
 }
 
-int DrawSingleGraphErrorsOnCanvas(string canvasname, TGraphErrors *gre, string drawoption,
+int DrawSingleGraphErrorsOnCanvas(string canvasname, TGraphErrors *gre, string drawoption="AP",
                    bool logx=false, bool logy=false, bool isrectangle=true)
 {
   //gStyle->SetOptTitle(0) ;
@@ -334,6 +334,19 @@ int DrawTwoGraphErrorsOnCanvas(string canvasname, TGraphErrors *gre1, TGraphErro
   leg->SetBorderSize(0) ;
   leg->AddEntry(gre1, gre1->GetTitle(), "LEP") ;
   leg->AddEntry(gre2, gre2->GetTitle(), "LEP") ;
+  if(gre1->GetY()[0]<gre1->GetY()[1])
+  {
+    leg->SetX1(0.5) ;
+    leg->SetX2(0.89) ;
+    leg->SetY1(0.1) ;
+    leg->SetY2(0.5) ;
+  }
+  leg->SetTextSize(0.03) ;
+  leg->SetFillStyle(0) ;
+  leg->SetBorderSize(0) ;
+  leg->AddEntry(gre1, gre1->GetTitle(), "P") ;
+  leg->AddEntry(gre2, gre2->GetTitle(), "P") ;
+>>>>>>> 84e845d6367af8cde0cd1f9885050aed2d0dc33d
   leg->Draw("same") ;
   c->Print((canvasname+".eps").c_str()) ;
   c->Print((canvasname+".pdf").c_str()) ;
@@ -394,7 +407,7 @@ int DrawThreeGraphErrorsOnCanvas(string canvasname,
 int DrawFourGraphErrorsOnCanvas(string canvasname, 
    TGraphErrors *gre1, TGraphErrors *gre2, TGraphErrors *gre3, TGraphErrors *gre4,
    string drawopt1="APL", string drawopt2="PL", string drawopt3="PL",string drawopt4="PL",
-   bool logx=false, bool logy=false, bool isrectangle=true)
+   bool logx=false, bool logy=false, bool isrectangle=false, string header="")
 {
   gStyle->SetOptTitle(0) ;
   // define canvas
@@ -408,10 +421,10 @@ int DrawFourGraphErrorsOnCanvas(string canvasname,
   if(logy) c->SetLogy() ;
 
   // set options of grapherrors
-  SetGraphErrorsAttributes(gre1, 1, 2, 1, 1001, 1, 20, 1, 1) ;
-  SetGraphErrorsAttributes(gre2, 1, 2, 2, 1001, 2, 21, 2, 1) ;
-  SetGraphErrorsAttributes(gre3, 1, 2, 3, 1001, 3, 22, 3, 1) ;
-  SetGraphErrorsAttributes(gre4, 1, 2, 4, 1001, 4, 23, 4, 1) ;
+  SetGraphErrorsAttributes(gre1, 1, 2, 2, 1001, 1, 21, 2, 1) ;
+  SetGraphErrorsAttributes(gre2, 1, 2, 3, 1001, 2, 22, 3, 1) ;
+  SetGraphErrorsAttributes(gre3, 1, 2, 4, 1001, 3, 23, 4, 1) ;
+  SetGraphErrorsAttributes(gre4, 1, 2, 6, 1001, 4, 24, 6, 1) ;
   TMultiGraph *mg = new TMultiGraph();
   mg->Add(gre1, drawopt1.c_str()) ;
   mg->Add(gre2, drawopt2.c_str()) ;
@@ -432,6 +445,16 @@ int DrawFourGraphErrorsOnCanvas(string canvasname,
   mg->GetYaxis()->SetTitle(gre1->GetYaxis()->GetTitle()) ;
   // draw legend
   TLegend *leg=new TLegend(0.5,0.6,0.89,0.89) ;
+  leg->SetHeader(header.c_str()) ;
+  TLegendEntry *theader = (TLegendEntry*)leg->GetListOfPrimitives()->First(); 
+  theader->SetTextAlign(22);
+  if(gre1->GetY()[0]<gre1->GetY()[1])
+  {
+    leg->SetX1(0.5) ;
+    leg->SetX2(0.89) ;
+    leg->SetY1(0.1) ;
+    leg->SetY2(0.5) ;
+  }
   leg->SetTextSize(0.03) ;
   leg->SetFillStyle(0) ;
   leg->SetBorderSize(0) ;
@@ -447,7 +470,8 @@ int DrawFourGraphErrorsOnCanvas(string canvasname,
 
 int DrawFiveGraphErrorsOnCanvas(string canvasname, 
 TGraphErrors *gre1, TGraphErrors *gre2, TGraphErrors *gre3, TGraphErrors *gre4, TGraphErrors *gre5, string drawopt1="APL", string drawopt2="PL", string drawopt3="PL",string drawopt4="PL",string drawopt5="PL",
-bool logx=false, bool logy=false, bool isrectangle=true)
+bool logx=false, bool logy=false, bool isrectangle=false, string header="")
+>>>>>>> 84e845d6367af8cde0cd1f9885050aed2d0dc33d
 {
   gStyle->SetOptTitle(0) ;
   // define canvas
@@ -483,6 +507,50 @@ bool logx=false, bool logy=false, bool isrectangle=true)
   leg->AddEntry(gre5, gre5->GetTitle(), "LEP") ;
   leg->Draw("same") ;
   c->Print((canvasname+".eps").c_str()) ;
+  SetGraphErrorsAttributes(gre5, 1, 2, 6, 1001, 5, 24, 6, 1) ;
+  TMultiGraph *mg = new TMultiGraph();
+  mg->Add(gre1, drawopt1.c_str()) ;
+  mg->Add(gre2, drawopt2.c_str()) ;
+  mg->Add(gre3, drawopt3.c_str()) ;
+  mg->Add(gre4, drawopt4.c_str()) ;
+  mg->Add(gre5, drawopt5.c_str()) ;
+  mg->Draw("A") ;
+  gPad->Modified();
+  float max=0, min=100000 ;
+  for (int i=0 ; i<gre1->GetN() ; i++)
+  {
+    if(gre1->GetY()[i]>=max) max=gre1->GetY()[i] ;
+    if(gre1->GetY()[i]<=min) min=gre1->GetY()[i] ;
+  }
+  //mg->SetMinimum(min*0.95) ;
+  //mg->SetMaximum(max*1.1) ;
+  SetMGraphAttributes(mg) ;
+  mg->GetXaxis()->SetTitle(gre1->GetXaxis()->GetTitle()) ;
+  mg->GetYaxis()->SetTitle(gre1->GetYaxis()->GetTitle()) ;
+  // draw legend
+  TLegend *leg=new TLegend(0.5,0.6,0.89,0.89) ;
+  leg->SetHeader(header.c_str()) ;
+  TLegendEntry *theader = (TLegendEntry*)leg->GetListOfPrimitives()->First();
+  theader->SetTextAlign(22);
+  if(gre1->GetY()[0]<gre1->GetY()[1])
+  {
+    leg->SetX1(0.5) ;
+    leg->SetX2(0.89) ;
+    leg->SetY1(0.1) ;
+    leg->SetY2(0.5) ;
+  }
+  leg->SetTextSize(0.03) ;
+  leg->SetFillStyle(0) ;
+  leg->SetBorderSize(0) ;
+  leg->AddEntry(gre1, gre1->GetTitle(), "P") ;
+  leg->AddEntry(gre2, gre2->GetTitle(), "P") ;
+  leg->AddEntry(gre3, gre3->GetTitle(), "P") ;
+  leg->AddEntry(gre4, gre4->GetTitle(), "P") ;
+  leg->AddEntry(gre5, gre5->GetTitle(), "P") ;
+  leg->Draw("same") ;
+  c->Print((canvasname+".eps").c_str()) ;
+  c->Print((canvasname+".pdf").c_str()) ;
+>>>>>>> 84e845d6367af8cde0cd1f9885050aed2d0dc33d
   return 0 ;
 }
 

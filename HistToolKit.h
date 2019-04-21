@@ -173,9 +173,7 @@ int DrawSingleHistOnCanvas(string canvasname, TH1F* hist, string drawoption="PE"
   SetHistAttributes(hist, 1, 2, 1, 1001, 0, 20, 1, 1, 0.04, 1.2, 0.04, 0.04, 1.2, 0.04) ;
   // draw histogram
   hist->Draw(drawoption.c_str()) ;
-  c->Print((canvasname+".eps").c_str()) ;
-  c->Print((canvasname+".png").c_str()) ;
-
+  c->Print((canvasname+".pdf").c_str()) ;
   return 0 ;
 }
 int SetHistDrawOption(TH1F* hist, TLegend *leg, bool DrawHistorNot=false)
@@ -262,7 +260,7 @@ int DrawTwoHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, string dra
   return 0 ;
 }
 
-int DrawThreeHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* hist3, string drawopt1="PE",string drawopt2="PESame", string drawopt3="PESame", bool logx=false, bool logy=true, bool isrectangle=true)
+int DrawThreeHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* hist3, string drawopt1="PE",string drawopt2="PESame", string drawopt3="PESame", bool logx=false, bool logy=true, bool isrectangle=true, string header="")
 {
   gStyle->SetOptTitle(0); //this will disable the title for all coming histograms
   // define Canvas
@@ -291,9 +289,9 @@ int DrawThreeHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* hi
 
   interpad->cd() ;
   // Set histogram attributes
-  SetHistAttributes(hist1, 1, 2, 1, 3004, 1, 20, 1, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
-  SetHistAttributes(hist2, 1, 2, 2, 3005, 1, 22, 2, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
-  SetHistAttributes(hist3, 1, 2, 3, 3006, 1, 23, 3, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist1, 1, 2, 3, 3004, 1, 22, 3, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist2, 1, 2, 4, 3005, 1, 23, 4, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist3, 1, 2, 6, 3006, 1, 24, 6, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
   // Draw Histograms
   hist1->Draw(drawopt1.c_str()) ;
   hist2->Draw(drawopt2.c_str()) ;
@@ -316,19 +314,29 @@ int DrawThreeHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* hi
   else
     leg->AddEntry(hist3, hist3->GetTitle(), "LPE") ;
   leg->Draw("same") ;
-  // sort the hist by its maximum
-  //std::vector< std::pair< TH1F*, bool > > histvec ;
-  //histvec.push_back(std::make_pair(hist1, FirstDrawHistorNot)) ;
-  //histvec.push_back(std::make_pair(hist2, SecondDrawHistorNot)) ;
-  //histvec.push_back(std::make_pair(hist3, ThirdDrawHistorNot)) ;
-  //std::sort(histvec.begin(), histvec.end(),sort_by_vechistmax) ;
-  // draw histograms using option "HIST" or not
-  //SetHistDrawOption(histvec, leg) ;
-  c->Print((canvasname+".eps").c_str()) ;
+  c->Print((canvasname+".pdf").c_str()) ;
   return 0 ;
 }
 
 int DrawFourHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* hist3, TH1F* hist4, string drawopt1="PE",string drawopt2="PESame", string drawopt3="PESame",string drawopt4="PESame",bool logx=false, bool logy=true, bool isrectangle=true)
+=======
+  TLegend *leg=new TLegend(0.6,0.6,0.89,0.89) ;
+  leg->SetHeader(header.c_str()) ;
+  TLegendEntry *theader = (TLegendEntry*)leg->GetListOfPrimitives()->First();
+  theader->SetTextAlign(22);
+  leg->SetFillStyle(0) ;
+  leg->SetTextSize(0.04) ;
+  leg->SetBorderSize(0) ;
+  leg->AddEntry(hist1, hist1->GetTitle(), "LPE") ;
+  leg->AddEntry(hist2, hist2->GetTitle(), "LPE") ;
+  leg->AddEntry(hist3, hist3->GetTitle(), "LPE") ;
+  leg->Draw("same") ;
+  c->Print((canvasname+".eps").c_str()) ;
+  c->Print((canvasname+".pdf").c_str()) ;
+  return 0 ;
+}
+
+int DrawFourHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* hist3, TH1F* hist4, string drawopt1="PE",string drawopt2="PESame", string drawopt3="PESame",string drawopt4="PESame",bool logx=false, bool logy=true, bool isrectangle=false, string header="")
 {
   gStyle->SetOptTitle(0); //this will disable the title for all coming histograms
   // define Canvas
@@ -357,45 +365,34 @@ int DrawFourHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* his
 
   interpad->cd() ;
   // Set histogram attributes
-  SetHistAttributes(hist1, 1, 2, 1, 0, 1, 20, 1, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
-  SetHistAttributes(hist2, 1, 2, 2, 0, 1, 22, 2, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
-  SetHistAttributes(hist3, 1, 2, 3, 0, 1, 23, 3, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
-  SetHistAttributes(hist4, 1, 2, 3, 0, 1, 24, 3, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist1, 1, 2, 2, 0, 1, 21, 2, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist2, 1, 2, 3, 0, 1, 22, 3, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist3, 1, 2, 4, 0, 1, 23, 4, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist4, 1, 2, 6, 0, 1, 24, 6, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
   // Draw Histograms
   hist1->Draw(drawopt1.c_str()) ;
   hist2->Draw(drawopt2.c_str()) ;
   hist3->Draw(drawopt3.c_str()) ;
   hist4->Draw(drawopt4.c_str()) ;
   // define legend
-  TLegend *leg=new TLegend(0.55,0.5,0.89,0.89) ;
+  TLegend *leg=new TLegend(0.6,0.6,0.89,0.89) ;
+  leg->SetHeader(header.c_str()) ;
+  TLegendEntry *theader = (TLegendEntry*)leg->GetListOfPrimitives()->First();
+  theader->SetTextAlign(22);
   leg->SetBorderSize(0) ;
   leg->SetFillStyle(0) ;
-  leg->SetTextSize(0.04) ;
+  leg->SetTextSize(0.03) ;
   leg->AddEntry(hist1, hist1->GetTitle(), "LPE") ;
   leg->AddEntry(hist2, hist2->GetTitle(), "LPE") ;
   leg->AddEntry(hist3, hist3->GetTitle(), "LPE") ;
   leg->AddEntry(hist4, hist4->GetTitle(), "LPE") ;
   leg->Draw("Same") ;
-  // sort the hist by its maximum
-  //std::vector< std::pair< TH1F*, bool > > histvec ;
-  //histvec.push_back(std::make_pair(hist1, FirstDrawHistorNot)) ;
- // histvec.push_back(std::make_pair(hist2, SecondDrawHistorNot)) ;
-  //histvec.push_back(std::make_pair(hist3, ThirdDrawHistorNot)) ;
-  //histvec.push_back(std::make_pair(hist4, FourthDrawHistorNot)) ;
-  //std::sort(histvec.begin(), histvec.end(),sort_by_vechistmax) ;
-  
-  // draw histograms using option "HIST" or not
-  //SetHistDrawOption(histvec, leg) ;
-  //TPaveText *pt = (TPaveText*)interpad->GetListOfPrimitives()->FindObject("title") ;
-  //pt->Clear() ;
-  //pt->Draw() ;
-  c->Print((canvasname+".eps").c_str()) ;
-
+  c->Print((canvasname+".pdf").c_str()) ;
   return 0 ;
 }
 
 int DrawFiveHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* hist3, TH1F* hist4, TH1F* hist5,
-string drawopt1="PE",string drawopt2="PESame",string drawopt3="PESame",string drawopt4="PESame", string drawopt5="PESame",bool logx=false, bool logy=true, bool isrectangle=true)
+string drawopt1="PE",string drawopt2="PESame",string drawopt3="PESame",string drawopt4="PESame", string drawopt5="PESame",bool logx=false, bool logy=true, bool isrectangle=true, string header="")
 {
   gStyle->SetOptTitle(0); //this will disable the title for all coming histograms
   // define Canvas
@@ -425,10 +422,10 @@ string drawopt1="PE",string drawopt2="PESame",string drawopt3="PESame",string dr
   interpad->cd() ;
   // Set histogram attributes
   SetHistAttributes(hist1, 1, 2, 1, 0, 1, 20, 1, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
-  SetHistAttributes(hist2, 1, 2, 2, 0, 1, 22, 2, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
-  SetHistAttributes(hist3, 1, 2, 3, 0, 1, 23, 3, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
-  SetHistAttributes(hist4, 1, 2, 4, 0, 1, 24, 4, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
-  SetHistAttributes(hist5, 1, 2, 5, 0, 1, 25, 5, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist2, 1, 2, 2, 0, 1, 21, 2, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist3, 1, 2, 3, 0, 1, 22, 3, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist4, 1, 2, 4, 0, 1, 23, 4, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist5, 1, 2, 6, 0, 1, 24, 6, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
   // Draw Histograms
   hist1->Draw(drawopt1.c_str()) ;
   hist2->Draw(drawopt2.c_str()) ;
@@ -436,29 +433,87 @@ string drawopt1="PE",string drawopt2="PESame",string drawopt3="PESame",string dr
   hist4->Draw(drawopt4.c_str()) ;
   hist5->Draw(drawopt5.c_str()) ;
   // define legend
-  TLegend *leg=new TLegend(0.55,0.4,0.89,0.89) ;
+  TLegend *leg=new TLegend(0.6,0.6,0.89,0.89) ;
+  leg->SetHeader(header.c_str()) ;
+  TLegendEntry *theader = (TLegendEntry*)leg->GetListOfPrimitives()->First();
+  theader->SetTextAlign(22);
   leg->SetBorderSize(0) ;
   leg->SetFillStyle(0) ;
-  leg->SetTextSize(0.04) ;
+  leg->SetTextSize(0.03) ;
   leg->AddEntry(hist1, hist1->GetTitle(), "LPE") ;
   leg->AddEntry(hist2, hist2->GetTitle(), "LPE") ;
   leg->AddEntry(hist3, hist3->GetTitle(), "LPE") ;
   leg->AddEntry(hist4, hist4->GetTitle(), "LPE") ;
   leg->AddEntry(hist5, hist5->GetTitle(), "LPE") ;
   leg->Draw("Same") ;
-  // sort the hist by its maximum
-  //std::vector< std::pair< TH1F*, bool > > histvec ;
-  //histvec.push_back(std::make_pair(hist1, FirstDrawHistorNot)) ;
-  //histvec.push_back(std::make_pair(hist2, SecondDrawHistorNot)) ;
-  //histvec.push_back(std::make_pair(hist3, ThirdDrawHistorNot)) ;
-  //histvec.push_back(std::make_pair(hist4, FourthDrawHistorNot)) ;
-  //histvec.push_back(std::make_pair(hist5, FifthDrawHistorNot)) ;
-  //std::sort(histvec.begin(), histvec.end(),sort_by_vechistmax) ;
-  // draw histograms using option "HIST" or not
-  //SetHistDrawOption(histvec, leg) ;
-  c->Print((canvasname+".eps").c_str()) ;
+  c->Print((canvasname+".pdf").c_str()) ;
   return 0 ;
 }
+
+int DrawSixHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* hist3, TH1F* hist4, TH1F* hist5, TH1F* hist6,
+string drawopt1="PE",string drawopt2="PESame",string drawopt3="PESame",string drawopt4="PESame", string drawopt5="PESame", string drawopt6="PESame",bool logx=false, bool logy=true, bool isrectangle=true, string header="")
+{
+  gStyle->SetOptTitle(0); //this will disable the title for all coming histograms
+  // define Canvas
+  float height=600 ;
+  float width ;
+  if(isrectangle)
+    width=800 ;
+  else
+    width=600 ;
+  TCanvas *c = new TCanvas(canvasname.c_str(), "", width, height) ;
+
+  // Define pads
+  TPad *outpad = new TPad("extpad","extpad",0,0,1,1) ;// For marking outermost dimensions
+  outpad->SetFillStyle(4000) ;//transparent
+  TPad *interpad = new TPad("interpad","interpad",0,0,1,1) ;// For main histo
+  SetPadAttributes(interpad, 0, 0, 0.1, 0.1, 0.1, 0.1, 0, logx, logy) ;
+
+  interpad->Draw() ;
+  outpad->Draw() ;
+
+  outpad->cd() ;
+  // Draw ATLAS Label
+//  DrawATLASLabels(0.5, 0.8, 4) ;
+  // draw center of mass energy and integrated luminosity
+//  DrawCMEAndLumi(0.5, 0.7, "XX", "13 TeV") ;
+
+  interpad->cd() ;
+  // Set histogram attributes
+  SetHistAttributes(hist1, 1, 2, 1, 0, 1, 20, 1, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist2, 1, 2, 2, 0, 1, 21, 2, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist3, 1, 2, 3, 0, 1, 22, 3, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist4, 1, 2, 4, 0, 1, 23, 4, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist5, 1, 2, 6, 0, 1, 24, 6, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  SetHistAttributes(hist6, 1, 2, 7, 0, 1, 24, 7, 1, 0.04, 1., 0.04, 0.04, 1.2, 0.04, false) ;
+  // Draw Histograms
+  hist1->Draw(drawopt1.c_str()) ;
+  hist2->Draw(drawopt2.c_str()) ;
+  hist3->Draw(drawopt3.c_str()) ;
+  hist4->Draw(drawopt4.c_str()) ;
+  hist5->Draw(drawopt5.c_str()) ;
+  hist5->Draw(drawopt6.c_str()) ;
+  // define legend
+  TLegend *leg=new TLegend(0.6,0.6,0.89,0.89) ;
+  leg->SetHeader(header.c_str()) ;
+  TLegendEntry *theader = (TLegendEntry*)leg->GetListOfPrimitives()->First();
+  theader->SetTextAlign(22);
+  leg->SetBorderSize(0) ;
+  leg->SetFillStyle(0) ;
+  leg->SetTextSize(0.03) ;
+  leg->AddEntry(hist1, hist1->GetTitle(), "LPE") ;
+  leg->AddEntry(hist2, hist2->GetTitle(), "LPE") ;
+  leg->AddEntry(hist3, hist3->GetTitle(), "LPE") ;
+  leg->AddEntry(hist4, hist4->GetTitle(), "LPE") ;
+  leg->AddEntry(hist5, hist5->GetTitle(), "LPE") ;
+  leg->AddEntry(hist6, hist6->GetTitle(), "LPE") ;
+  leg->Draw("Same") ;
+  c->Print((canvasname+".eps").c_str()) ;
+  c->Print((canvasname+".pdf").c_str()) ;
+  return 0 ;
+}
+
+>>>>>>> 84e845d6367af8cde0cd1f9885050aed2d0dc33d
 int DrawTwelveHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* hist3, TH1F* hist4, TH1F* hist5,TH1F* hist6, TH1F* hist7, TH1F* hist8, TH1F* hist9, TH1F* hist10,TH1F* hist11, TH1F* hist12, string drawopt1="PE",string drawopt2="PESame",string drawopt3="PESame",string drawopt4="PESame", string drawopt5="PESame",string drawopt6="PESame",string drawopt7="PESame",string drawopt8="PESame",string drawopt9="PESame", string drawopt10="PESame",string drawopt11="PESame",string drawopt12="PESame",bool logx=false, bool logy=true, bool isrectangle=true)
 {
   gStyle->SetOptTitle(0); //this will disable the title for all coming histograms
@@ -536,9 +591,7 @@ int DrawTwelveHistsOnCanvas(string canvasname, TH1F* hist1, TH1F* hist2, TH1F* h
   return 0 ;
 }
 
-int DrawTopTwoHistsAndBottomOneHistOnCanvas(string canvasname, TH1F *top1, TH1F *top2, TH1F *bottom1, 
-    string topdrawopt1 = "HIST",string topdrawopt2 = "PESAME", string bottomdrawopt="PE", 
-    bool logx=false, bool toplogy=true, bool bottomlogy=false)
+int DrawTopTwoHistsAndBottomOneHistOnCanvas(string canvasname, TH1F *top1, TH1F *top2, TH1F *bottom1, string topdrawopt1 = "HIST",string topdrawopt2 = "PESAME", string bottomdrawopt="PE",bool logx=false, bool toplogy=true, bool bottomlogy=false)
 {
   gStyle->SetOptTitle(0); //this will disable the title for all coming histograms
   // define Canvas
@@ -580,15 +633,13 @@ int DrawTopTwoHistsAndBottomOneHistOnCanvas(string canvasname, TH1F *top1, TH1F 
   leg->SetFillStyle(0) ;
   leg->SetTextSize(0.04) ;
   leg->SetBorderSize(0) ;
-  // sort the top hists by its maximum
-  //std::vector< std::pair< TH1F*, bool > > histvec ;
-  //histvec.push_back(std::make_pair(top1, TFirstDrawHistorNot)) ;
-  //histvec.push_back(std::make_pair(top2, TSecondDrawHistorNot)) ;
-  //std::sort(histvec.begin(), histvec.end(),sort_by_vechistmax) ;
-  // draw histograms using option "HIST" or not
-  //SetHistDrawOption(histvec, leg) ;
   top1->Draw(topdrawopt1.c_str()) ;
   top2->Draw(topdrawopt2.c_str()) ;
+  // draw legend
+  TLegend *leg=new TLegend(0.5,0.7,0.89,0.89) ;
+  leg->SetFillStyle(0) ;
+  leg->SetTextSize(0.03) ;
+  leg->SetBorderSize(0) ;
   if(topdrawopt1.find("HIST")!=string::npos)
     leg->AddEntry(top1, top1->GetTitle(), "L") ;
   else
