@@ -1,0 +1,58 @@
+#####################################################################
+               Author: Dengfeng Zhang
+       Use these scripts to draw plots with good looking.
+#####################################################################
+
+Set the attributes of pads, histograms, graphs, hstack ......
+- SetAttributes.h:
+  SetHistFillAttributes(): Set fillcolor and fillstyle of the histogram
+  SetHistLineAttributes(): Set Line attributes of hist
+  SetHistAxisAttributes(): Set Axis attributes of hist
+  SetHistMarkerAttributes(): Set Axis attributes of hist
+  SetHistAttributes(): Set attributes(fill, line axis marker) of hist
+  SetPadFillAttributes): Set fill attributes of apd
+  SetPadAttributes(): Set attributes(fill, line axis marker) of pad
+  SetGraphAttributes(): Set attributes(fill, line axis marker) of graph
+  SetGraphFillAttributes()
+  SetGraphLineAttributes()
+  SetGraphMarkerAttributes()
+  SetGraphAxisAttributes()
+  SetGraphErrorsAttributes(): Set attributes(fill, line axis marker) of grapherrors
+  SetGraphErrorsFillAttributes()
+  SetGraphErrorsLineAttributes()
+  SetGraphErrorsMarkerAttributes()
+  SetGraphErrorsAxisAttributes()
+  SetGraphAsymmErrorsAttributes(): Set attributes(fill, line axis marker) of graphasymmerrors
+  SetGraphAsymmErrorsFillAttributes()
+  SetGraphAsymmErrorsLineAttributes()
+  SetGraphAsymmErrorsMarkerAttributes()
+  SetGraphAsymmErrorsAxisAttributes()
+
+- HistToolKit.h:
+  bookTH1F(): new TH1F with equal bin
+  bookTH1F(): new TH1F with bin edge array
+  DrawSingleHist(): draw one histogram on one canvas
+  DrawTwoHistsInOneCanvas(): draw two histograms on one canvas
+  DrawThreeHistsInOneCanvas(): draw three hiotograms on one canvas
+  DrawFourHistsInOneCanvas(): draw four histograms on one canvas
+  DrawFiveHistsInOneCanvas(): draw five histograms on one canvas
+  DrawTopTwoHistsAndBottomOneHist(): 
+  DrawTopTwoHistsAndBottomTwoHists():
+  DrawTwoHistsinHStack():
+  DrawThreeHistsinStack():
+  DrawFourHistsinHStack():
+  DrawTwoHistsinStackAndOneHist()
+  DrawThreeHistsinHStackAndOneHist():
+  DrawFourHistsinHStackAndOneHist():
+  DrawTopTwoHistsinHStackAndOneHistBottomOneHist():
+  DrawTopThreeHistsinHStackAndOneHistBottomOneHist():
+  DrawTopFourHistsinHStacksAndOneHistBottomOneHist():
+  GetRatioHistOfTwoHists(): get the ratio hist of two histograms
+  GetErrorBarRatioHistOfTwoHists(): get the ratio hist of the error bar of two histograms
+  bool sort_by_histmax(TH1F* hist1, TH1F* hist2): sort the hists by its max
+  bool sort_by_vechistmax(std::pair<TH1F*, bool> p1, std::pair<TH1F*, bool> p2)
+
+- GraphToolKit.h:
+  DrawSigleGraph()
+  DrawSigleGraphErrors()
+  DrawSigleAsymmGraphErrors()
